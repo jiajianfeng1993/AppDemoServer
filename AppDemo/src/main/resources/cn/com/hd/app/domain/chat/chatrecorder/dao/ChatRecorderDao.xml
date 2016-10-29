@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.hd.app.domain.chat.chatrecorder.dao.ChatRecorderDao">
+	<resultMap id="base_result_map"
+		type="cn.com.hd.app.domain.chat.chatrecorder.model.ChatRecorderModel">
+		<id column="recorder_id" property="id" jdbcType="INTEGER" />
+		<result column="send_account_id" property="sendAccountId"
+			jdbcType="INTEGER" />
+		<result column="receive_account_id" property="receiveAccountId"
+			jdbcType="INTEGER" />
+		<result column="content_type" property="contentType" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="show_order" property="showOrder" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		recorder_id, send_account_id, receive_account_id, content_type, content,
+		create_time,
+		state, show_order
+	</sql>
+	<sql id="query_where">
+		<where>
+			<if test="id!=null">
+				AND recorder_id=#{id}
+			</if>
+			<if test="sendAccountId!=null">
+				AND send_account_id=#{sendAccountId}
+			</if>
+			<if test="receiveAccountId!=null">
+				AND receive_account_id=#{receiveAccountId}
+			</if>
+			<if test="contentType!=null">
+				AND content_type=#{contentType}
+			</if>
+			<if test="content!=null">
+				AND content=#{content}
+			</if>
+			<if test="createTime!=null">
+				AND create_time=#{createTime}
+			</if>
+			<if test="state!=null">
+				AND state=#{state}
+			</if>
+			<if test="showOrder!=null">
+				AND show_order=#{showOrder}
+			</if>
+		</where>
+	</sql>
+	<sql id="table_name">
+		CHAT_RECORDER
+	</sql>
+
+<!-- 分页sql片段 -->
+	<sql id="list_limit">
+		<if test="startRow != null">
+			LIMIT #{startRow},#{pageSize}
+		</if>
+	</sql>
+
+	<!-- 排序sql片段 -->
+	<sql id="list_order">
+			ORDER BY show_order ASC,create_time DESC
+	</sql>
+
+	<insert id="add"
+		parameterType="cn.com.hd.app.domain.chat.chatrecorder.model.ChatRecorderModel">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		<include refid="table_name"></include>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				recorder_id,
+			</if>
+			<if test="sendAccountId != null">
+				send_account_id,
+			</if>
+			<if test="receiveAccountId != null">
+				receive_account_id,
+			</if>
+			<if test="contentType != null">
+				content_type,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="showOrder != null">
+				show_order,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="sendAccountId != null">
+				#{sendAccountId,jdbcType=INTEGER},
+			</if>
+			<if test="receiveAccountId != null">
+				#{receiveAccountId,jdbcType=INTEGER},
+			</if>
+			<if test="contentType != null">
+				#{contentType,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="showOrder != null">
+				#{showOrder,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+
+	<select id="getByKey" parameterType="map" resultMap="base_result_map">
+		SELECT
+		<include refid="base_column_list"></include>
+		FROM
+		<include refid="table_name"></include>
+		WHERE recorder_id=#{id}
+	</select>
+
+	<update id="updateByKey" parameterType="cn.com.hd.app.domain.chat.chatrecorder.model.ChatRecorderModel">
+		UPDATE
+		<include refid="table_name"></include>
+		<set>
+			<if test="sendAccountId!=null">
+				AND send_account_id=#{sendAccountId}
+			</if>
+			<if test="receiveAccountId!=null">
+				AND receive_account_id=#{receiveAccountId}
+			</if>
+			<if test="contentType!=null">
+				AND content_type=#{contentType}
+			</if>
+			<if test="content!=null">
+				AND content=#{content}
+			</if>
+			<if test="createTime!=null">
+				AND create_time > #{createTime}
+			</if>
+			<if test="state!=null">
+				AND state=#{state}
+			</if>
+			<if test="showOrder!=null">
+				AND show_order=#{showOrder}
+			</if>
+		</set>
+		WHERE recorder_id=#{id}
+	</update>
+	<delete id="deleteByKey">
+		UPDATE
+		<include refid="table_name"></include>
+		SET
+		state=0
+		WHERE
+		recorder_id=#{id}
+	</delete>
+	<select id="getList" parameterType="cn.com.hd.app.domain.chat.chatrecorder.model.query.ChatRecorderQuery" resultMap="base_result_map">
+		SELECT 
+		<include refid="base_column_list"></include>
+		FROM
+		<include refid="table_name"></include>
+		<include refid="query_where"></include>
+		<include refid="list_order"></include>
+	</select>
+	<select id="getListCount" parameterType="cn.com.hd.app.domain.chat.chatrecorder.model.query.ChatRecorderQuery">
+		SELECT 
+		COUNT(1)
+		FROM
+		<include refid="table_name"></include>
+		<include refid="query_where"></include>
+		<include refid="list_order"></include>
+	</select>
+	
+	<select id="getAccountRecorder" parameterType="map" resultMap="base_result_map">
+		SELECT 
+		<include refid="base_column_list"/>
+		FROM
+		<include refid="table_name"/>
+		WHERE
+			send_account_id=#{accountId} or receive_account_id=#{accountId}
+		<include refid="list_order"/>
+	</select>
+</mapper>

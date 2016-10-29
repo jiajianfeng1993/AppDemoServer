@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/main/java/cn/com/hd/app/common/web/converter/CustomDateConverter.java=UTF-8
+encoding//src/main/java/cn/com/hd/common/encode/PwdCodeInterface.java=UTF-8
+encoding//src/main/java/cn/com/hd/common/exception/RollBackException.java=UTF-8
+encoding//src/main/java/cn/com/hd/common/exception/ValidateException.java=UTF-8
+encoding//src/main/java/cn/com/hd/common/utils=UTF-8
+encoding//src/main/java/cn/com/hd/common/utils/BeanUtil.java=UTF-8
+encoding//src/main/java/cn/com/hd/common/utils/FormatUtil.java=UTF-8
